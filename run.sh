@@ -14,12 +14,12 @@ done
 
 echo "Using TF_VERSION=$TF_VERSION GPU_TAG=$GPU_TAG"
 
-docker build --build-arg GPU_TAG=${GPU_TAG} --build-arg TF_VERSION=${TF_VERSION} -t attention-keras:tf-${TF_VERSION}${GPU_TAG} .
+sudo docker build --build-arg GPU_TAG=${GPU_TAG} --build-arg TF_VERSION=${TF_VERSION} -t attention-keras:tf-${TF_VERSION}${GPU_TAG} .
 
-if [ -z $(docker ps -lq --filter ancestor=attention-keras:tf-${TF_VERSION}${GPU_TAG}) ]; then
-	docker run -it --gpus all -v ${PWD}/src:/app/src -v ${PWD}/data:/app/data -v ${PWD}/results:/app/results --env-file .env \
+if [ -z $(sudo docker ps -lq --filter ancestor=attention-keras:tf-${TF_VERSION}${GPU_TAG}) ]; then
+	sudo docker run -it --gpus all -v ${PWD}/src:/app/src -v ${PWD}/data:/app/data -v ${PWD}/results:/app/results --env-file .env \
 	attention-keras:tf-${TF_VERSION}${GPU_TAG} bash
 else
-	container_id = $(docker ps -lq --filter ancestor=attention-keras:tf-${TF_VERSION}${GPU_TAG})
-	docker exec -it ${container_id} bash
+	container_id = $(sudo docker ps -lq --filter ancestor=attention-keras:tf-${TF_VERSION}${GPU_TAG})
+	sudo docker exec -it ${container_id} bash
 fi
